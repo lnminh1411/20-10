@@ -1,0 +1,26 @@
+body {
+    background-color: #FFFDD0;
+    margin: 0;
+    padding: 0;
+}
+
+.content-box {
+    width: 100vw;
+    max-width: 480px;
+    height: 300px;
+    margin: 40px auto;
+    display: flex;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.content-box .left {
+    flex: 1;
+    background: linear-gradient(135deg, #ff5e62 0%, #ff9966 100%);
+}
+
+.content-box .right {
+    flex: 1;
+    background-color: #f5e6b2;
+}
