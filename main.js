@@ -1,217 +1,121 @@
 $(document).ready(function () {
-  let clickCount = 0;
-
-  AOS.init({
-    duration: 800,
-    once: true,
-    offset: 100,
-  });
-
-  $(".card-container").on("click", function (e) {
-    if (!$(e.target).hasClass("next-page")) {
-      clickCount++;
-
-      if (clickCount === 1) {
-        $(this).addClass("flipped");
-
-        setTimeout(function () {
-          $(".card-front .text").css("opacity", "0");
-        }, 150);
-      }
-    }
-  });
-
-  $(".next-page").on("click", function (e) {
-    e.stopPropagation();
-    $(".card-container").addClass("folded");
-    onFolded();
-  });
-
-  $("#arrow").on("click", function (e) {
-    e.preventDefault();
-    $("html, body").animate(
-      {
-        scrollTop: $("#imgs").offset().top,
-      },
-      800
-    );
-    $("#scroll-indicator").removeClass("show");
-    setTimeout(function () {
-      $("#scroll-indicator").hide();
-    }, 500);
-  });
-
-  function onFolded() {
-    $("#scroll-indicator").addClass("show");
-    generateImageGallery();
-  }
-
-  function generateImageGallery() {
-    const galleryGrid = $(".gallery-grid");
-    const imageCount = 6;
-
-    const pinColors = [
-      "#ff6b6b",
-      "#4ecdc4",
-      "#45b7d1",
-      "#96ceb4",
-      "#feca57",
-      "#ff9ff3",
-    ];
-
-    let loadedImages = 0;
-
-    function calculateImageSize(naturalWidth, naturalHeight, isMobile) {
-      const aspectRatio = naturalWidth / naturalHeight;
-
-      if (isMobile) {
-        // Mobile - smaller max dimensions
-        const maxWidth = 280;
-        const maxHeight = 350;
-
-        let width = maxWidth;
-        let height = width / aspectRatio;
-
-        if (height > maxHeight) {
-          height = maxHeight;
-          width = height * aspectRatio;
-        }
-
-        return { width, height };
-      } else {
-        // Desktop - larger max dimensions
-        const maxWidth = 380;
-        const maxHeight = 450;
-
-        let width = maxWidth;
-        let height = width / aspectRatio;
-
-        if (height > maxHeight) {
-          height = maxHeight;
-          width = height * aspectRatio;
-        }
-
-        return { width, height };
-      }
-    }
-
-    function checkViewport() {
-      return window.innerWidth >= 768; // 768px is our mobile breakpoint
-    }
-
-    for (let i = 1; i <= imageCount; i++) {
-      const randomRotation = Math.floor(Math.random() * 21) - 10;
-
-      const randomColor =
-        pinColors[Math.floor(Math.random() * pinColors.length)];
-
-      const frame = $("<div>", {
-        class: "picture-frame",
-        "data-aos": "fade-in",
-        css: {
-          transform: `rotate(${randomRotation}deg)`,
-        },
-      });
-
-      const pin = $("<div>", {
-        class: "picture-pin",
-        css: {
-          backgroundColor: randomColor,
-        },
-      });
-
-      const imageContainer = $("<div>", {
-        class: "image-container",
-      });
-
-      const img = new Image();
-      img.className = "frame-image";
-      img.alt = `Image ${i}`;
-
-      img.onload = function () {
-        const isDesktop = checkViewport();
-        const { width, height } = calculateImageSize(
-          this.naturalWidth,
-          this.naturalHeight,
-          !isDesktop
-        );
-
-        $(this).css({
-          width: width + "px",
-          height: height + "px",
-        });
-
-        // Also adjust the frame padding based on image size for better visual balance
-        const framePaddingHorizontal = Math.max(30, width * 0.08);
-        const framePaddingBottom = Math.max(45, height * 0.15);
-
-        frame.css({
-          padding: `30px ${framePaddingHorizontal}px ${framePaddingBottom}px ${framePaddingHorizontal}px`,
-        });
-
-        loadedImages++;
-        if (loadedImages === imageCount) {
-          AOS.refresh();
-        }
-      };
-
-      img.onerror = function () {
-        // Fallback to placeholder with appropriate size
-        const isDesktop = checkViewport();
-        const { width, height } = calculateImageSize(400, 300, !isDesktop);
-
-        $(this).attr("src", "https://picsum.photos/400/300");
-        $(this).css({
-          width: width + "px",
-          height: height + "px",
-        });
-
-        loadedImages++;
-        if (loadedImages === imageCount) {
-          AOS.refresh();
-        }
-      };
-
-      img.src = `./imgs/${i}.JPG`;
-
-      imageContainer.append(img);
-      frame.append(pin, imageContainer);
-      galleryGrid.append(frame);
-    }
-
-    // Handle window resize to adjust image sizes
-    let resizeTimeout;
-    $(window).on("resize", function () {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(function () {
-        $(".frame-image").each(function () {
-          const $img = $(this);
-          const naturalWidth = $img[0].naturalWidth || 400;
-          const naturalHeight = $img[0].naturalHeight || 300;
-          const isDesktop = checkViewport();
-          const { width, height } = calculateImageSize(
-            naturalWidth,
-            naturalHeight,
-            !isDesktop
-          );
-
-          $img.css({
-            width: width + "px",
-            height: height + "px",
+  let t = 0;
+  AOS.init({ duration: 800, once: !0, offset: 100 }),
+    $(".card-container").on("click", function (e) {
+      $(e.target).hasClass("next-page") ||
+        (t++,
+        1 === t &&
+          ($(this).addClass("flipped"),
+          setTimeout(function () {
+            $(".card-front .text").css("opacity", "0");
+          }, 150)));
+    }),
+    $(".next-page").on("click", function (t) {
+      t.stopPropagation(),
+        $(".card-container").addClass("folded"),
+        $("#scroll-indicator").addClass("show"),
+        (function () {
+          const t = $(".gallery-grid"),
+            e = 6,
+            i = [
+              "#ff6b6b",
+              "#4ecdc4",
+              "#45b7d1",
+              "#96ceb4",
+              "#feca57",
+              "#ff9ff3",
+            ];
+          let n,
+            a = 0;
+          function s(t, e, i) {
+            const n = t / e;
+            if (i) {
+              const t = 350;
+              let e = 280,
+                i = e / n;
+              return i > t && ((i = t), (e = i * n)), { width: e, height: i };
+            }
+            {
+              const t = 450;
+              let e = 380,
+                i = e / n;
+              return i > t && ((i = t), (e = i * n)), { width: e, height: i };
+            }
+          }
+          function o() {
+            return window.innerWidth >= 768;
+          }
+          for (let n = 1; n <= e; n++) {
+            const c = Math.floor(21 * Math.random()) - 10,
+              r = i[Math.floor(Math.random() * i.length)],
+              h = $("<div>", {
+                class: "picture-frame",
+                "data-aos": "fade-in",
+                css: { transform: `rotate(${c}deg)` },
+              }),
+              d = $("<div>", {
+                class: "picture-pin",
+                css: { backgroundColor: r },
+              }),
+              l = $("<div>", { class: "image-container" }),
+              f = new Image();
+            (f.className = "frame-image"),
+              (f.alt = `Image ${n}`),
+              (f.onload = function () {
+                const t = o(),
+                  { width: i, height: n } = s(
+                    this.naturalWidth,
+                    this.naturalHeight,
+                    !t
+                  );
+                $(this).css({ width: i + "px", height: n + "px" });
+                const c = Math.max(30, 0.08 * i),
+                  r = Math.max(45, 0.15 * n);
+                h.css({ padding: `30px ${c}px ${r}px ${c}px` }),
+                  a++,
+                  a === e && AOS.refresh();
+              }),
+              (f.onerror = function () {
+                const t = o(),
+                  { width: i, height: n } = s(400, 300, !t);
+                $(this).attr("src", "https://picsum.photos/400/300"),
+                  $(this).css({ width: i + "px", height: n + "px" }),
+                  a++,
+                  a === e && AOS.refresh();
+              }),
+              (f.src = `./imgs/${n}.JPG`),
+              l.append(f),
+              h.append(d, l),
+              t.append(h);
+          }
+          $(window).on("resize", function () {
+            clearTimeout(n),
+              (n = setTimeout(function () {
+                $(".frame-image").each(function () {
+                  const t = $(this),
+                    e = t[0].naturalWidth || 400,
+                    i = t[0].naturalHeight || 300,
+                    n = o(),
+                    { width: a, height: c } = s(e, i, !n);
+                  t.css({ width: a + "px", height: c + "px" });
+                  const r = t.closest(".picture-frame"),
+                    h = Math.max(30, 0.08 * a),
+                    d = Math.max(45, 0.15 * c);
+                  r.css({ padding: `30px ${h}px ${d}px ${h}px` });
+                }),
+                  AOS.refresh();
+              }, 250));
           });
-
-          // Adjust frame padding
-          const frame = $img.closest(".picture-frame");
-          const framePaddingHorizontal = Math.max(30, width * 0.08);
-          const framePaddingBottom = Math.max(45, height * 0.15);
-
-          frame.css({
-            padding: `30px ${framePaddingHorizontal}px ${framePaddingBottom}px ${framePaddingHorizontal}px`,
-          });
-        });
-
+        })(),
+        $(".surprise-container").addClass("show"),
         AOS.refresh();
-      }, 250);
+    }),
+    $("#arrow").on("click", function (t) {
+      t.preventDefault(),
+        $("html, body").animate({ scrollTop: $("#imgs").offset().top }, 800),
+        $("#scroll-indicator").removeClass("show"),
+        setTimeout(function () {
+          $("#scroll-indicator").hide();
+        }, 500);
     });
-  }
 });
