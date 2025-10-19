@@ -83,7 +83,7 @@ $(document).ready(function () {
                   a++,
                   a === e && AOS.refresh();
               }),
-              (f.src = `./imgs/${n}.JPG`),
+              (f.src = `./imgs/${n}.webp`),
               l.append(f),
               h.append(d, l),
               t.append(h);
