@@ -3,11 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style src="main.css"></style>
-    <script src="main.js"></script>
+    <title>A little surprise</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <div class="card-container">
+        <div class="card-front">
+            <div class="clouds"></div>
+            <div class="text" style="font-family: 'Pacifico', cursive;">Click to open</div>
+        </div>
+        <div class="card-back">
+            <div class="text-content">
+                <div class="text">A Special Message Just For You</div>
+                <p>Life is full of beautiful moments and sweet surprises. Today is your day to shine and enjoy every little thing that brings you happiness.</p>
+            </div>
+            <div class="next-page">Next page →</div>
+        </div>
+        <div class="folded-card">
+            <div class="message">Remember not to eat too much candy—you're sweet enough already.</div>
+        </div>
+    </div>
     
+    <div id="scroll-indicator" class="hidden">
+        <div class="scroll-text">Scroll down!</div>
+        <div id="arrow" title="Scroll down!">
+            <a href="#imgs" class="scrolllink">
+                <svg stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" fill="none"
+                    viewBox="0 0 512 512">
+                    <path d="M112 184l144 144 144-144"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>

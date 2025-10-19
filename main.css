@@ -1,26 +1,275 @@
-body {
-    background-color: #FFFDD0;
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-.content-box {
-    width: 100vw;
-    max-width: 480px;
-    height: 300px;
-    margin: 40px auto;
+@keyframes headerAnimate {
+  0%,
+  50% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.35;
+  }
+}
+
+@keyframes MoveUpDown {
+  0%,
+  to {
+    margin-bottom: 0;
+  }
+
+  50% {
+    margin-bottom: 15px;
+  }
+}
+
+body {
+    height: 100vh;
     display: flex;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    border-radius: 16px;
+    align-items: center;
+    justify-content: center;
+    background-color: #b6fdff;
+    font-family: Arial, sans-serif;
+    perspective: 1000px;
+}
+
+.card-container {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+.card-container:hover {
+    transform: rotateY(15deg);
+}
+
+.card-container.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-container.folded {
+    height: 300px;
+    transform: rotateY(180deg);
+    transition: transform 0.8s, height 0.8s;
+}
+
+.card-front, .card-back, .folded-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border: 10px solid #ff8fa3;
+    border-radius: 10px;
+    box-shadow: 
+        0 0 100px rgba(0,0,0,.4),
+        inset 0 0 20px rgba(0,0,0,0.1);
     overflow: hidden;
 }
 
-.content-box .left {
-    flex: 1;
-    background: linear-gradient(135deg, #ff5e62 0%, #ff9966 100%);
+.card-front {
+    background-color: #e0f7fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.content-box .right {
-    flex: 1;
-    background-color: #f5e6b2;
+.card-front:before {
+    content:"";
+    position: absolute;
+    background-color: #ffb3c1;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    top:440px;
+    left:-25px;
+    box-shadow:60px 20px #ffb3c1,130px 10px #ffb3c1, 190px 20px #ffb3c1,260px -5px #ffb3c1, 340px 20px #ffb3c1;
 }
+
+.card-front:after {
+    content:"";
+    position: absolute;
+    background-color: #ffccd5;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    top:460px;
+    left:-40px;
+    box-shadow: 50px 20px #ffccd5,120px 40px #ffccd5, 200px 15px #ffccd5,260px 30px #ffccd5, 330px 30px #ffccd5,380px 10px #ffccd5;
+}
+
+.clouds {
+    position: absolute;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background-color: #fff0f3;
+    top:510px;
+    left:-20px;
+    box-shadow: 55px 30px #fff0f3, 125px 10px #fff0f3,175px 20px #fff0f3, 250px 10px #fff0f3, 320px 5px #fff0f3, 380px 10px #fff0f3;
+}
+
+.card-front .text {
+    position: relative;
+    z-index: 10;
+    color: #ff8fa3;
+    font-size: 30px;
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    transition: opacity 0.3s;
+}
+
+.card-back {
+    background-color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    position: relative;
+}
+
+.text-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.card-back .text {
+    color: #800f2f;
+    font-size: 30px;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.card-back p {
+    color: #333;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.next-page {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 16px;
+    color: #ff8fa3;
+    cursor: pointer;
+    padding: 8px 12px;
+    border: 1px solid #ff8fa3;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.next-page:hover {
+    background-color: #ff8fa3;
+    color: white;
+}
+
+.folded-card {
+    background-color: white;
+    transform: rotateY(180deg);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    height: 300px;
+}
+
+.folded-card .message {
+    font-family: 'Pacifico', cursive;
+    font-size: 25px;
+    color: #800f2f;
+    line-height: 1.4;
+}
+
+.card-container.folded .folded-card {
+    display: flex;
+}
+
+.card-container.folded .card-back {
+    display: none;
+}
+
+.instruction {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+#scroll-indicator {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+#scroll-indicator.show {
+    opacity: 1;
+}
+
+#scroll-indicator.hidden {
+    display: none;
+}
+
+.scroll-text {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #777777;
+    font-size: 22px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.scroll-text:hover {
+    opacity: 1;
+}
+
+#arrow,
+#arrow svg {
+  transition: opacity 0.2s;
+}
+
+#arrow {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-top: 30px;
+  transition: opacity 0.5s;
+}
+
+#arrow svg {
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0 15px;
+  width: 80px;
+  height: 110px;
+  color: #777777;
+  animation: MoveUpDown 3s infinite, headerAnimate 2s;
+}
+
+#arrow svg:hover {
+  opacity: 1;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
